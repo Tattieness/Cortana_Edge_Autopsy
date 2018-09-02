@@ -112,7 +112,7 @@ class CortanaContentViewer extends javax.swing.JPanel implements DataContentView
                 int startIndexOf = extract.indexOf("<title>") + 7;  // Find the location of the start of the Title Text
                 int endIndexOf = extract.indexOf(" - Bing"); // Find the location of the end of the Title Text
 
-                if (endIndexOf - startIndexOf < 1) {  // If no text found then
+                if ((endIndexOf - startIndexOf < 1) || (startIndexOf < 7)) {  // If no text found then
                     setText("No text found"); // set the text on the panel to No text found
                 } else {
                     setText(extract.substring(startIndexOf, endIndexOf)); // else set the text to the title 

@@ -210,7 +210,7 @@ public class EsentReader {
                     long coltyp = colInfo.pColValInfo.coltyp.longValue(); // retrieve the Column Type
                     long colbuff = colInfo.pColValInfo.cbMax.longValue(); // retrieve the Column Width
                     long colId = colInfo.pColValInfo.columnid.longValue(); // retrieve the Column Id 
-
+                    
                     colData.getColumnData(psesidVal, ptableidVal, colId, coltyp, colbuff); // execute the getColumndata method for the column on the schema 
 
                     if (coltyp == 1 || coltyp == 2) {  // if coltyp is a byte then 
@@ -243,7 +243,7 @@ public class EsentReader {
             }
         }
         jetErr = EsentLibrary.INSTANCE.JetCloseTable(psesidVal, ptableidVal);  // Close the table
-        callJetErrorCheck(jetErr, "Closing Table " + szTableName, szFilename);
+        callJetErrorCheck(jetErr, "Close Table " + szTableName, szFilename);
         return rows; // Return what has been found
     }
 
@@ -293,10 +293,10 @@ public class EsentReader {
         if (!selectedRows.isEmpty()) {   // If the selected rows array is not empty then
             for (String selectedRow : selectedRows) {  // for each row in the array then
 
-                start = selectedRow.indexOf("CreationTime");   // find the start of location of the Creation Time
-                end = selectedRow.indexOf("LastUpdateTime", start); // find the end of location of the Creation Time
+                start = selectedRow.indexOf("LastUpdateTime");   // find the start of location of the Updated Time
+                end = selectedRow.indexOf("LastAccessTime", start); // find the end of location of the Update Time - Used as Creation Time as not always accurate
 
-                returnedRows.add(selectedRow.substring(start + 26, end - 1)); //  Add the Creation Time to the array to be returned
+                returnedRows.add(selectedRow.substring(start + 28, end - 1)); //  Add the Updated Time to the array to be returned
 
                 start = selectedRow.indexOf("Title Col Type");   // find the start of location of the Title
                 end = selectedRow.indexOf("Text Col Type", start); // find the end of location of the Title

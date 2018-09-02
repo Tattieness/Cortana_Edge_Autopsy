@@ -37,7 +37,7 @@ public class EsentColData {
 
     public EsentColData getColumnData(Pointer psesidVal, Pointer ptableidVal, long colId, long colType, long colSize) {
 
-        PointerByReference pcbActual = new PointerByReference(); // Native Long for the maximum buffer size to return the column metadata
+        PointerByReference pcbActual = new PointerByReference(); // Native Long for the size of the returning the column data
         NativeLong jetGrbit = new NativeLong(); // Native Long for jetGrbit - used to set any required flags as bits
         jetGrbit.setValue(0); // No flags required - set to 0;
         NativeLong cbData = new NativeLong(); // Used to define the maximum length of the column
@@ -67,8 +67,21 @@ public class EsentColData {
                 longValue = buff.getLong(0);
             }
             if ((colType == 10) || (colType == 12)) { // Value is a wide string
-                  stringValue = buff.getWideString(0);
+                 stringValue = buff.getWideString(0);
+                 if (pcbActual.getPointer().getInt(0) == 0)
+                 {
+                   stringValue = "";  
+                 }
+                 else if (pcbActual.getPointer().getInt(0) < stringValue.length())
+                 {
+                    stringValue =  buff.getWideString(0).substring(0,pcbActual.getPointer().getInt(0));
+                 }
+                 else
+                     stringValue =  buff.getWideString(0);
+         
             }
+            
+            
             buff.clear(); // Cleardown the memory buffer
         }
         return this; // Return this object
